@@ -1,0 +1,89 @@
+{
+  "alwaysThinkingEnabled": true,
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(python:*)",
+      "Bash(jupyter:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Read(*)",
+      "Write(docs/**)",
+      "Write(calculations/**)",
+      "Write(design/**)",
+      "Write(testing/**)",
+      "Write(verification/**)",
+      "Write(templates/**)",
+      "Write(CONTEXT.md)",
+      "Write(TODO.md)",
+      "Edit(docs/**)",
+      "Edit(calculations/**)",
+      "Edit(CONTEXT.md)",
+      "Grep(*)",
+      "Glob(*)",
+      "WebSearch(*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Write(.env)",
+      "Write(.env.*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '🧠 SESSION START: Read CONTEXT.md to understand current project state, blocking issues, and next actions. DO NOT START WORK WITHOUT READING CONTEXT.md FIRST.'"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/require-context-before-work.py\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/enforce-documentation-before-design.py\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/validate-bash-safety.py\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-context-update.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

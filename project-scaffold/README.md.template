@@ -1,0 +1,43 @@
+# {{PROJECT_NAME}}
+
+{{PROJECT_DESCRIPTION}}
+
+## Quick Start
+
+1. Read `WORKFLOW.md` for engineering workflow
+2. Read `CONTEXT.md` for current project state
+3. Run `/prime` in Claude Code to orient yourself
+
+## Structure
+
+```
+├── calculations/     # Engineering calculations (Jupyter notebooks)
+├── design/          # CAD files and design iterations
+├── docs/            # Documentation (decisions, reference, research, systems)
+├── manufacturing/   # BOM and manufacturing processes
+├── templates/       # Document templates
+├── testing/         # Test data and results
+├── verification/    # Calculation verification
+├── project_params.py    # Single source of truth for parameters
+├── CONTEXT.md       # AI session handoff
+├── WORKFLOW.md      # Engineering workflow guide
+└── TODO.md          # Task backlog
+```
+
+## Key Commands
+
+| Command | Description |
+|---------|-------------|
+| `/prime` | Read essential project context |
+| `/understand [system]` | Research before designing |
+| `/research [topic]` | Web search and document |
+| `/decision [title]` | Create decision record |
+| `/verify-calc` | Verify calculation against reference |
+
+## Dashboard
+
+Generate project dashboard:
+```bash
+python scripts/generate_dashboard.py
+```
+Open `dashboard.html` in browser.

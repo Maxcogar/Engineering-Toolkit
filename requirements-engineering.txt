@@ -1,0 +1,45 @@
+# AI Engineering Toolkit - Core Dependencies
+# Install with: pip install -r requirements-engineering.txt
+
+# Core Scientific Stack
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+
+# Jupyter
+jupyter>=1.0.0
+ipykernel>=6.0.0
+jupyterlab>=4.0.0
+
+# Engineering Units & Constants
+pint>=0.22
+scipy  # includes physical constants
+
+# Engineering Calculations
+fluids>=1.0.0           # Fluid mechanics
+ht>=0.5.0               # Heat transfer
+thermo>=0.2.0           # Thermodynamics & chemical properties
+CoolProp>=6.4.0         # Thermophysical properties
+
+# Optional: Combustion (uncomment if needed)
+# cantera>=3.0.0        # Chemical kinetics, combustion
+
+# Optional: Turbomachinery (uncomment if needed)
+# tespy>=0.6.0          # Thermal engineering systems
+
+# Optional: Structural (uncomment if needed)
+# solidspy>=1.0.0       # FEA
+# pyNastran>=1.4.0      # Nastran file handling
+
+# Visualization
+plotly>=5.0.0
+seaborn>=0.12.0
+
+# Data Handling
+openpyxl>=3.1.0         # Excel files
+PyYAML>=6.0.0           # YAML config files
+
+# Utilities
+tqdm>=4.65.0            # Progress bars
+rich>=13.0.0            # Pretty console output

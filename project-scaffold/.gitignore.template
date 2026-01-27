@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Generated files
+dashboard.html
+chroma_db/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large binaries (consider Git LFS)
+# *.step
+# *.stl
+# *.sldprt
+
+# Sensitive files
+.env
+credentials.json
+*.key
+*.pem
+
+# Test artifacts
+testing/data/**/*.raw
+testing/data/**/*.bin

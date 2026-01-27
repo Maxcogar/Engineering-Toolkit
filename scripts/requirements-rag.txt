@@ -1,0 +1,13 @@
+# RAG System Requirements
+# Install with: pip install -r scripts/requirements-rag.txt
+
+llama-index
+llama-index-vector-stores-chroma
+llama-index-embeddings-huggingface
+chromadb
+sentence-transformers
+pypdf
+pdfplumber
+
+# Optional: for better PDF extraction
+pymupdf

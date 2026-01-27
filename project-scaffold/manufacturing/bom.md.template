@@ -1,0 +1,33 @@
+# Bill of Materials - {{PROJECT_NAME}}
+
+## Summary
+
+| Category | Count | Est. Cost |
+|----------|-------|-----------|
+| Purchased | | |
+| Fabricated | | |
+| **Total** | | |
+
+## Purchased Parts
+
+| Part # | Description | Qty | Vendor | Part Number | Unit Cost | Total | Status |
+|--------|-------------|-----|--------|-------------|-----------|-------|--------|
+| P-001 | | | | | | | |
+
+## Fabricated Parts
+
+| Part # | Description | Qty | Material | Process | Drawing | Status |
+|--------|-------------|-----|----------|---------|---------|--------|
+| F-001 | | | | | | |
+
+## Fasteners & Hardware
+
+| Item | Spec | Qty | Status |
+|------|------|-----|--------|
+| | | | |
+
+## Status Key
+
+- [ ] Not ordered
+- [~] On order
+- [x] In hand

@@ -1,0 +1,189 @@
+# {{PROJECT_NAME}} - Engineering Workflow
+
+This document describes how to use this workspace for R&D work.
+
+## Workspace Structure
+
+```
+{{PROJECT_NAME}}/
+├── project_params.py          # Single source of truth for all parameters
+├── calculations/              # Jupyter notebooks for engineering calculations
+├── design/                    # CAD files, drawings, iterations
+│   ├── iterations/           # Versioned design snapshots (v0.1, v0.2, ...)
+│   └── drawings/             # Manufacturing drawings
+├── docs/
+│   ├── systems/              # Active design work organized by system
+│   ├── decisions/            # Design decision records (DEC-XXX)
+│   └── reference/            # Source material (read-only)
+├── manufacturing/            # Manufacturing procedures and BOM
+│   ├── bom.md
+│   ├── processes/            # Step-by-step procedures per part
+│   └── toolpaths/            # CNC programs
+├── templates/                # Templates for all documentation
+├── testing/                  # Test data and results
+│   ├── data/                # Raw test data (never modify)
+│   ├── analysis/            # Post-processing scripts
+│   └── results/             # Test result documentation
+└── verification/             # Independent verification of calculations
+    ├── hand-calcs/
+    ├── cross-checks/
+    └── validation-tests/
+```
+
+## Key Principles
+
+1. **Single Source of Truth:** All design parameters live in `project_params.py`
+2. **Executable Calculations:** Use Jupyter notebooks, not static markdown
+3. **Traceable Decisions:** Document all design choices in `docs/decisions/`
+4. **Verification Required:** All calculations must be checked against literature/benchmarks
+5. **Results, Not Raw Data:** External tools (CFD, FEA) contribute summary findings only
+
+## Daily Workflow
+
+### Running Calculations
+
+1. Open relevant calculation notebook in `calculations/[system]/`
+2. Notebook automatically imports parameters from `project_params.py`
+3. Run calculations, adjust as needed
+4. Generate output specifications
+5. If verified and approved, update system specifications
+
+### Making Design Decisions
+
+1. Perform analysis (calculations, trade studies, etc.)
+2. Create decision record in `docs/decisions/DEC-XXX-title.md`
+3. Document: what was decided, alternatives considered, rationale, assumptions
+4. Link to supporting calculations
+5. Commit decision record to Git
+
+### Adding New Calculations
+
+1. Copy template from `templates/calculation-notebook-template.ipynb`
+2. Place in appropriate `calculations/[system]/` folder
+3. Rename with descriptive name
+4. Follow template structure: Purpose > Inputs > Theory > Calculations > Verification > Conclusions
+5. Always import from `project_params.py`:
+
+   ```python
+   import sys
+   sys.path.append('../..')
+   from project_params import *
+   ```
+
+6. Always cite sources for equations
+7. Include verification against known results
+
+### Creating Test Documentation
+
+When performing tests:
+
+1. Create test directory structure:
+
+   ```text
+   testing/data/TEST-NNN/
+   testing/results/TEST-NNN/
+   ```
+
+2. Use template: `templates/test-results-template.md`
+3. Save raw data to `testing/data/TEST-NNN/` (never modify)
+4. Document procedure, observations, and results
+5. Create analysis notebook in `testing/analysis/`
+
+### Documenting Design Iterations
+
+When creating or updating CAD models:
+
+1. Work in `design/` root directory
+2. When reaching milestone, create iteration snapshot:
+   - Copy files to `design/iterations/vX.X/`
+   - Use template: `templates/design-iteration-template.md`
+   - Document what changed and why
+3. Create manufacturing drawings in `design/drawings/`
+
+### Parameter Changes
+
+When a design parameter changes:
+
+1. Update `project_params.py`
+2. Re-run affected calculation notebooks
+3. Review outputs for any issues
+4. Update affected specifications
+5. Document the change and rationale in decision record
+
+## Verification Process
+
+All calculations supporting actual hardware MUST be verified before use.
+
+### What Needs Verification
+
+- Dimensions used for manufacturing
+- Safety-critical calculations (stress, pressure, temperature)
+- Performance predictions
+- Anything influencing design decisions
+
+### Verification Workflow
+
+1. Complete calculation notebook (marked "Draft")
+2. Create verification report using `templates/verification-report-template.md`
+3. Independent review using different method or cross-reference with literature
+4. Compare results:
+   - Exact match not required
+   - Within 5-10% typically acceptable
+   - Large differences require investigation
+5. Document findings in verification report
+6. Update original notebook status to "Verified"
+
+## Git Workflow
+
+**Commit frequency:**
+- Calculation development: commit when working, can be messy
+- Decision records: always commit immediately
+- Approved specs: clean commits with clear messages
+- Templates/infrastructure: commit when stable
+
+**Commit message format:**
+```
+[TYPE] Brief description
+
+Types: CALC, DECISION, SPEC, DOC, INFRA, TEST, DESIGN, FIX
+```
+
+## Claude's Role
+
+Claude can:
+- Create and run calculation notebooks
+- Search literature for verification data
+- Generate decision record documents
+- Check calculations against templates
+- Suggest when verification is needed
+- Help organize and document work
+
+Claude should NOT:
+- Make design decisions without your approval
+- Declare work "complete" or "ready"
+- Skip verification steps
+- Generate specifications without calculations backing them
+
+## Available Templates
+
+All templates are in `templates/` directory:
+
+- `calculation-notebook-template.ipynb` - Engineering calculations
+- `test-results-template.md` - Test documentation
+- `design-iteration-template.md` - Design change documentation
+- `manufacturing-process-template.md` - Manufacturing procedures
+- `research-notes-template.md` - Research documentation
+- `verification-report-template.md` - Calculation verification
+- Decision template: `docs/decisions/000-template.md`
+
+## Quick Reference
+
+| I want to... | Directory | Template |
+|--------------|-----------|----------|
+| Create calculation | `calculations/[system]/` | `calculation-notebook-template.ipynb` |
+| Document decision | `docs/decisions/` | `000-template.md` |
+| Create CAD model | `design/` | `design-iteration-template.md` |
+| Document test | `testing/results/` | `test-results-template.md` |
+| Create manufacturing procedure | `manufacturing/processes/` | `manufacturing-process-template.md` |
+| Verify calculation | `verification/` | `verification-report-template.md` |
+| Research topic | `docs/reference/` | `research-notes-template.md` |

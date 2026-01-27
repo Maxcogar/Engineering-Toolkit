@@ -1,0 +1,41 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code when working with this project.
+
+## Session Workflow
+
+**At session start:** Read `CONTEXT.md` to understand current project state, blocking issues, and next actions.
+
+**At session end:** Update `CONTEXT.md` with:
+- What was worked on and accomplished
+- Any decisions made (create decision records in `docs/decisions/` for significant choices)
+- What to pick up next session
+- Any knowledge documented in `docs/reference/`
+
+## Project Architecture
+
+This is an engineering R&D workspace with the following structure:
+
+- **docs/decisions/** - Numbered decision records (DEC-NNN format). Document why engineering choices were made.
+- **docs/reference/** - Claude's learned knowledge. Create files here when researching topics for this project.
+- **docs/research/_sources.md** - User's research sources and URLs.
+- **calculations/** - Jupyter notebooks and Python scripts for engineering calculations.
+- **design/** - CAD files, drawings, and design iteration snapshots in `iterations/vX.X/`.
+- **testing/** - Test data (raw), analysis scripts, and results kept separate.
+- **manufacturing/** - Process docs, toolpaths, and BOM.
+
+## Git Conventions
+
+Commit message format:
+```
+[TYPE] Description
+
+Types: DECISION, CALC, TEST, RESEARCH, DESIGN, FIX, DOC
+```
+
+## Key Files
+
+- `CONTEXT.md` - AI session handoff (read first, update last)
+- `TODO.md` - Long-term task backlog and priorities
+- `WORKFLOW.md` - Engineering workflow documentation
+- `project_params.py` - Single source of truth for parameters

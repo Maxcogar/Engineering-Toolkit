@@ -1,0 +1,57 @@
+# {{PROJECT_NAME}} - AI Context
+
+> This file is the handoff document between Claude sessions.
+> Update at end of each session. Read at start of each session.
+
+## Project State
+
+**Current Phase:** Initial setup
+
+**Blocking Issues:**
+
+- None
+
+**Next Actions:**
+
+- [ ] Define project requirements
+- [ ] Research key technical areas
+- [ ] Begin initial calculations
+
+## Critical Parameters
+
+| Parameter | Value | Source |
+|-----------|-------|--------|
+| | | |
+
+## Key Decisions Made
+
+| Date | Decision | Rationale | Link |
+|------|----------|-----------|------|
+| {{DATE}} | Initial project structure | AI Engineering Toolkit | - |
+
+## System Status
+
+| System | Status | Documentation |
+|--------|--------|---------------|
+| | | |
+
+## Claude's Learned Knowledge
+
+Files in `docs/reference/` that Claude has researched for this project:
+
+- (none yet)
+
+## Session History
+
+### {{DATE}} (Session 1)
+
+**Worked on:** Project initialization
+
+**Accomplished:**
+
+- Created project from toolkit template
+- Set up initial structure
+
+**Next session:**
+
+- Begin project-specific work

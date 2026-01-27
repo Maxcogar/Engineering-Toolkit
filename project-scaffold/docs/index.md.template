@@ -1,0 +1,27 @@
+# {{PROJECT_NAME}} Documentation
+
+Project documentation entry point.
+
+## Quick Links
+
+- [Decision Records](decisions/) - Engineering decisions
+- [Reference Materials](reference/) - PDFs, datasheets
+- [Research Notes](research/) - Investigation findings
+- [System Documentation](systems/) - System-level docs
+
+## Project Overview
+
+{{PROJECT_DESCRIPTION}}
+
+## Getting Started
+
+1. Read `../WORKFLOW.md` for engineering workflow
+2. Read `../CONTEXT.md` for current state
+3. Run `/prime` in Claude Code
+
+## Documentation Guidelines
+
+- Create decision records for significant choices
+- Document research before design work
+- Keep reference materials in `reference/`
+- Organize system docs by subsystem
