@@ -3,7 +3,7 @@
 Update existing project with latest toolkit files.
 
 This updates:
-- .claude/ (hooks, commands, agents, settings)
+- .claude/ (hooks, commands, agents, skills, SKILL.md, settings)
 - scripts/
 - templates/
 
@@ -55,7 +55,7 @@ def update_project(project_path: Path, force: bool = False, dry_run: bool = Fals
 
     if dry_run:
         print("DRY RUN - Would update:")
-        print("  - .claude/ (hooks, commands, agents, settings)")
+        print("  - .claude/ (hooks, commands, agents, skills, SKILL.md, settings)")
         print("  - scripts/")
         print("  - templates/")
         return
@@ -66,14 +66,14 @@ def update_project(project_path: Path, force: bool = False, dry_run: bool = Fals
     claude_dest = project_path / ".claude"
 
     if claude_src.is_dir():
-        # Remove old hooks, commands, agents (but preserve settings.local.json if exists)
+        # Remove old hooks, commands, agents, skills (but preserve settings.local.json if exists)
         settings_local = None
         settings_local_path = claude_dest / "settings.local.json"
         if settings_local_path.is_file():
             settings_local = settings_local_path.read_text()
 
         # Remove and replace subdirectories
-        for subdir in ["hooks", "commands", "agents"]:
+        for subdir in ["hooks", "commands", "agents", "skills", "SKILL.md"]:
             dest_subdir = claude_dest / subdir
             if dest_subdir.is_dir():
                 shutil.rmtree(dest_subdir)
@@ -91,9 +91,13 @@ def update_project(project_path: Path, force: bool = False, dry_run: bool = Fals
         if readme_src.is_file():
             shutil.copy2(readme_src, claude_dest / "README.md")
 
-        # Restore settings.local.json
-        if settings_local:
+        # Restore settings.local.json (or add default from toolkit)
+        if settings_local is not None:
             settings_local_path.write_text(settings_local)
+        else:
+            settings_local_src = claude_src / "settings.local.json"
+            if settings_local_src.is_file() and not settings_local_path.is_file():
+                shutil.copy2(settings_local_src, settings_local_path)
 
     # Update scripts
     print("[2/4] Updating scripts...")
@@ -147,6 +151,8 @@ def update_project(project_path: Path, force: bool = False, dry_run: bool = Fals
     print("  - .claude/hooks/")
     print("  - .claude/commands/")
     print("  - .claude/agents/")
+    print("  - .claude/skills/")
+    print("  - .claude/SKILL.md/")
     print("  - .claude/settings.json")
     print("  - scripts/")
     print("  - templates/")

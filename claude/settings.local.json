@@ -1,0 +1,46 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "core-memory",
+    "sequential-thinking"
+  ],
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"🧠 SESSION STARTED: Search memory for context about: $(basename $(pwd)) project, previous conversations, and related work. Do this before responding to user queries.\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '💭 CONTEXT SEARCH: Before responding, use memory-search to search for: previous discussions about this topic, related project context, and similar problems solved before. Before this conversation ends, you must use memory-ingest to store: [USER] their question/request + [ASSISTANT] your solution/explanation/reasoning. Do this storage as the very last action.'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '📋 SESSION ENDING: If codebase changes were made (new files, updated dependencies, changed structure), use the claudemd-maintainer agent to sync CLAUDE.md before ending.'"
+          }
+        ]
+      }
+    ]
+  },
+  "enableAllProjectMcpServers": true
+}

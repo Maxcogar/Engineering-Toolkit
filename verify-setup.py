@@ -10,28 +10,21 @@ Usage:
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
 # Required directories
 REQUIRED_DIRS = [
+    ".claude",
     "calculations",
     "design",
-    "design/iterations",
     "docs",
-    "docs/decisions",
-    "docs/reference",
-    "docs/research",
-    "docs/systems",
     "manufacturing",
-    "testing",
-    "verification",
-    ".claude",
-    ".claude/hooks",
-    ".claude/commands",
-    ".claude/agents",
     "scripts",
     "templates",
+    "testing",
+    "verification",
 ]
 
 # Required core files
@@ -74,6 +67,22 @@ REQUIRED_AGENTS = [
     "systematic-engineer.md",
     "memory-ingest.md",
     "memory-search.md",
+]
+
+# Required skill definition files
+REQUIRED_SKILLS = [
+    "skills/SKILL.md",
+]
+
+# Required skill template files
+REQUIRED_SKILL_TEMPLATES = [
+    "SKILL.md/CONTEXT.md",
+    "SKILL.md/decision-template.md",
+    "SKILL.md/init-engineering-project.sh",
+    "SKILL.md/reference-template.md",
+    "SKILL.md/sources-template.md",
+    "SKILL.md/TODO.md",
+    "SKILL.md/workspace-structure.md",
 ]
 
 # Required scripts
@@ -151,21 +160,36 @@ class Verifier:
         """Verify Claude configuration."""
         print("\n[Claude Configuration]")
 
+        claude_dir = self.project_path / ".claude"
+
         # Check settings.json
-        settings_path = self.project_path / ".claude" / "settings.json"
+        settings_path = claude_dir / "settings.json"
         settings_valid = False
         if settings_path.is_file():
             try:
                 json.loads(settings_path.read_text(encoding='utf-8'))
-                settings_valid = True
                 self.passes += 1
+                settings_valid = True
             except json.JSONDecodeError:
                 self.check(False, "settings.json is invalid JSON")
         else:
             self.check(False, "settings.json not found")
 
+        # Check settings.local.json (core-memory config)
+        settings_local_path = claude_dir / "settings.local.json"
+        settings_local_valid = False
+        if settings_local_path.is_file():
+            try:
+                json.loads(settings_local_path.read_text(encoding='utf-8'))
+                self.passes += 1
+                settings_local_valid = True
+            except json.JSONDecodeError:
+                self.check(False, "settings.local.json is invalid JSON")
+        else:
+            self.check(False, "settings.local.json not found")
+
         # Check hooks
-        hooks_dir = self.project_path / ".claude" / "hooks"
+        hooks_dir = claude_dir / "hooks"
         hooks_count = 0
         for hook in REQUIRED_HOOKS:
             if (hooks_dir / hook).is_file():
@@ -175,7 +199,7 @@ class Verifier:
                 self.check(False, f"Missing hook: {hook}")
 
         # Check commands
-        commands_dir = self.project_path / ".claude" / "commands"
+        commands_dir = claude_dir / "commands"
         commands_count = 0
         for cmd in REQUIRED_COMMANDS:
             if (commands_dir / cmd).is_file():
@@ -185,7 +209,7 @@ class Verifier:
                 self.check(False, f"Missing command: {cmd}")
 
         # Check agents
-        agents_dir = self.project_path / ".claude" / "agents"
+        agents_dir = claude_dir / "agents"
         agents_count = 0
         for agent in REQUIRED_AGENTS:
             if (agents_dir / agent).is_file():
@@ -194,14 +218,34 @@ class Verifier:
             else:
                 self.check(False, f"Missing agent: {agent}")
 
+        # Check skills
+        skills_count = 0
+        for rel_path in REQUIRED_SKILLS:
+            if (claude_dir / rel_path).is_file():
+                skills_count += 1
+                self.passes += 1
+            else:
+                self.check(False, f"Missing skill file: {rel_path}")
+
+        skill_templates_count = 0
+        for rel_path in REQUIRED_SKILL_TEMPLATES:
+            if (claude_dir / rel_path).is_file():
+                skill_templates_count += 1
+                self.passes += 1
+            else:
+                self.check(False, f"Missing skill template: {rel_path}")
+
         print(f"  Settings: {'valid' if settings_valid else 'INVALID'}")
+        print(f"  Settings.local: {'valid' if settings_local_valid else 'MISSING/INVALID'}")
         print(f"  Hooks: {hooks_count}/{len(REQUIRED_HOOKS)}")
         print(f"  Commands: {commands_count}/{len(REQUIRED_COMMANDS)}")
         print(f"  Agents: {agents_count}/{len(REQUIRED_AGENTS)}")
+        print(f"  Skills: {skills_count}/{len(REQUIRED_SKILLS)}")
+        print(f"  Skill templates: {skill_templates_count}/{len(REQUIRED_SKILL_TEMPLATES)}")
 
         return (hooks_count, commands_count, agents_count)
 
-    def verify_scripts(self) -> int:
+def verify_scripts(self) -> int:
         """Verify required scripts exist."""
         print("\n[Scripts]")
         scripts_dir = self.project_path / "scripts"
@@ -237,8 +281,21 @@ class Verifier:
             return False
 
         self.passes += 1
-        print("  [PASS] Git repository initialized")
-        return True
+        try:
+            result = subprocess.run(
+                ["git", "-C", str(self.project_path), "rev-parse", "--verify", "HEAD"],
+                capture_output=True,
+                text=True
+            )
+            if result.returncode == 0:
+                self.passes += 1
+                print("  [PASS] Git repository initialized with commits")
+                return True
+            self.check(False, "Git repository has no commits", is_warning=True)
+            return False
+        except FileNotFoundError:
+            self.check(False, "Git not available to verify commits", is_warning=True)
+            return False
 
     def verify_optional(self):
         """Check optional components."""
